@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,56 +9,180 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Inter:wght@400;700&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    
+
     <style>
-        :root { --primary: #003399; --secondary: #E31E24; --ai: #7E22CE; --bg: #FFFFFF; }
-        body { font-family: 'Sarabun', sans-serif; background-color: #F8FAFC; color: #1E293B; overflow-x: hidden; }
-        .font-header { font-family: 'Inter', sans-serif; }
-        
-        /* สไตล์ Dashboard เหมือนใน Capture.PNG */
-        .glass-card { background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid rgba(226, 232, 240, 0.6); transition: all 0.3s ease; }
-        .glass-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        
-        .nav-link { position: relative; transition: all 0.2s ease; color: #64748B; font-weight: 500; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 0.75rem; }
-        .nav-link:hover { background: #F1F5F9; color: var(--primary); }
-        .nav-link.active { color: var(--primary); font-weight: 700; background: #EEF2FF; }
-        
-        /* Scanner UI */
-        .video-wrapper { position: relative; width: 100%; aspect-ratio: 3/4; background: #000; border-radius: 2rem; overflow: hidden; border: 8px solid white; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
-        video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-        .scan-mask { position: absolute; inset: 0; border: 3px solid var(--primary); border-radius: 50% 50% 45% 45%; box-shadow: 0 0 0 2000px rgba(0,0,0,0.6); pointer-events: none; }
-        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--primary); box-shadow: 0 0 20px var(--primary); animation: scanLine 3s infinite linear; }
-        
-        @keyframes scanLine { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
-        .btn-press:active { transform: scale(0.96); opacity: 0.9; }
-        
-        .ai-gradient { background: linear-gradient(135deg, #7E22CE 0%, #3B82F6 100%); }
-        .message-ai { border-radius: 1.25rem 1.25rem 1.25rem 0; background: #F3E8FF; }
-        .message-user { border-radius: 1.25rem 1.25rem 0 1.25rem; background: var(--primary); color: white; }
+        :root {
+            --primary: #003399;
+            --secondary: #E31E24;
+            --ai: #7E22CE;
+            --bg: #FFFFFF;
+        }
 
-        /* Animation for Page Content */
-        .page-content { animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            overflow-x: hidden;
+        }
 
-        /* Fix for icons not rendering (blue blobs) */
-        [data-lucide] { width: 1.2rem; height: 1.2rem; }
+        .font-header {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.2s ease;
+            color: #64748B;
+            font-weight: 500;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+        }
+
+        .nav-link:hover {
+            background: #F1F5F9;
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 700;
+            background: #EEF2FF;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: #000;
+            border-radius: 2rem;
+            overflow: hidden;
+            border: 8px solid white;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+
+        .scan-mask {
+            position: absolute;
+            inset: 0;
+            border: 3px solid var(--primary);
+            border-radius: 50% 50% 45% 45%;
+            box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+            animation: scanLine 3s infinite linear;
+        }
+
+        @keyframes scanLine {
+            0% {
+                top: 0;
+            }
+
+            50% {
+                top: 100%;
+            }
+
+            100% {
+                top: 0;
+            }
+        }
+
+        .btn-press:active {
+            transform: scale(0.96);
+            opacity: 0.9;
+        }
+
+        .ai-gradient {
+            background: linear-gradient(135deg, #7E22CE 0%, #3B82F6 100%);
+        }
+
+        .message-ai {
+            border-radius: 1.25rem 1.25rem 1.25rem 0;
+            background: #F3E8FF;
+        }
+
+        .message-user {
+            border-radius: 1.25rem 1.25rem 0 1.25rem;
+            background: var(--primary);
+            color: white;
+        }
+
+        .page-content {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        [data-lucide] {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col">
 
     <!-- Top Navigation -->
     <nav class="bg-white border-b sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 md:px-8 flex justify-between items-center h-16 md:h-20">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-blue-800 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">F</div>
+                <div
+                    class="w-10 h-10 bg-blue-800 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                    F</div>
                 <div class="flex flex-col">
-                    <h1 class="font-bold text-lg text-slate-800 leading-tight">FaceFlow <span class="text-red-600 font-header">Pro</span></h1>
-                    <span class="text-[9px] bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded-full font-bold self-start mt-0.5">AI ENHANCED</span>
+                    <h1 class="font-bold text-lg text-slate-800 leading-tight">FaceFlow <span
+                            class="text-red-600 font-header">Pro</span></h1>
+                    <span
+                        class="text-[9px] bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded-full font-bold self-start mt-0.5">AI
+                        ENHANCED</span>
                 </div>
             </div>
-            
+
             <div class="flex space-x-2 md:space-x-4 items-center">
                 <button onclick="nav('dash')" id="tab-dash" class="nav-link active">
                     <i data-lucide="home"></i> <span class="hidden md:inline">Home</span>
@@ -85,15 +210,17 @@
                     <p class="text-slate-400 text-sm">สถานะอุปกรณ์และซอฟต์แวร์แบบเรียลไทม์</p>
                 </div>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Status Cards (เหมือนใน Capture.PNG) -->
-                <div class="glass-card p-6 flex flex-col justify-between h-44 cursor-pointer group" onclick="testCameraDirectly()">
+                <div class="glass-card p-6 flex flex-col justify-between h-44 cursor-pointer group"
+                    onclick="testCameraDirectly()">
                     <div class="flex justify-between items-start">
-                        <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                        <div
+                            class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
                             <i data-lucide="camera" class="w-6 h-6"></i>
                         </div>
-                        <span id="badge-cam" class="text-[10px] font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-500 uppercase">รอดำเนินการ</span>
+                        <span id="badge-cam"
+                            class="text-[10px] font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-500 uppercase">รอดำเนินการ</span>
                     </div>
                     <div class="mt-4">
                         <p class="text-sm font-bold text-slate-700">Hardware กล้อง</p>
@@ -106,7 +233,9 @@
                         <div class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-600">
                             <i data-lucide="map-pin" class="w-6 h-6"></i>
                         </div>
-                        <span id="badge-gps" class="text-[10px] font-bold px-3 py-1 rounded-full bg-red-50 text-red-600 uppercase">ตรวจสอบ GPS...</span>
+                        <span id="badge-gps"
+                            class="text-[10px] font-bold px-3 py-1 rounded-full bg-red-50 text-red-600 uppercase">ตรวจสอบ
+                            GPS...</span>
                     </div>
                     <div class="mt-4">
                         <p class="text-sm font-bold text-slate-700">พิกัด GPS</p>
@@ -116,10 +245,12 @@
 
                 <div class="glass-card p-6 flex flex-col justify-between h-44">
                     <div class="flex justify-between items-start">
-                        <div class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600">
+                        <div
+                            class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600">
                             <i data-lucide="brain-circuit" class="w-6 h-6"></i>
                         </div>
-                        <span id="badge-ai" class="text-[10px] font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-500 uppercase">กำลังโหลด...</span>
+                        <span id="badge-ai"
+                            class="text-[10px] font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-500 uppercase">กำลังโหลด...</span>
                     </div>
                     <div class="mt-4">
                         <p class="text-sm font-bold text-slate-700">สมองกล Face AI</p>
@@ -136,16 +267,21 @@
                     </h4>
                     <div style="height: 220px;"><canvas id="statChart"></canvas></div>
                 </div>
-                
-                <div class="ai-gradient rounded-[2rem] p-10 text-white flex flex-col justify-between shadow-xl shadow-purple-100 relative overflow-hidden group transition-all hover:scale-[1.01]">
+
+                <div
+                    class="ai-gradient rounded-[2rem] p-10 text-white flex flex-col justify-between shadow-xl shadow-purple-100 relative overflow-hidden group transition-all hover:scale-[1.01]">
                     <div class="relative z-10">
-                        <h4 class="text-3xl font-bold mb-3 tracking-tight flex items-center gap-2">✨ ผู้ช่วย AI ส่วนตัว</h4>
-                        <p class="text-sm text-purple-100 opacity-95 leading-relaxed max-w-sm">สอบถามข้อมูลการทำงาน สรุปสถิติรายเดือน หรือขอคำแนะนำเพื่อเพิ่มผลผลิตได้ทันที</p>
+                        <h4 class="text-3xl font-bold mb-3 tracking-tight flex items-center gap-2">✨ ผู้ช่วย AI ส่วนตัว
+                        </h4>
+                        <p class="text-sm text-purple-100 opacity-95 leading-relaxed max-w-sm">สอบถามข้อมูลการทำงาน
+                            สรุปสถิติรายเดือน หรือขอคำแนะนำเพื่อเพิ่มผลผลิตได้ทันที</p>
                     </div>
-                    <button onclick="nav('ai')" class="relative z-10 bg-white text-purple-700 px-8 py-4 rounded-2xl font-bold text-sm btn-press mt-8 shadow-lg w-fit flex items-center gap-2 hover:bg-purple-50">
+                    <button onclick="nav('ai')"
+                        class="relative z-10 bg-white text-purple-700 px-8 py-4 rounded-2xl font-bold text-sm btn-press mt-8 shadow-lg w-fit flex items-center gap-2 hover:bg-purple-50">
                         <i data-lucide="message-circle" class="w-4 h-4"></i> พูดคุยกับ AI Assistant
                     </button>
-                    <i data-lucide="sparkles" class="absolute -right-6 -bottom-6 w-48 h-48 text-white opacity-10 rotate-12"></i>
+                    <i data-lucide="sparkles"
+                        class="absolute -right-6 -bottom-6 w-48 h-48 text-white opacity-10 rotate-12"></i>
                 </div>
             </div>
         </section>
@@ -164,58 +300,77 @@
                     <div class="scan-mask"></div>
                     <div class="absolute inset-0 flex items-center justify-center hidden" id="scan-loading">
                         <div class="bg-white/95 p-8 rounded-[2rem] text-center shadow-2xl">
-                            <div class="w-10 h-10 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                            <p class="text-[10px] font-bold text-purple-600 uppercase tracking-widest">AI กำลังประมวลผล...</p>
+                            <div
+                                class="w-10 h-10 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4">
+                            </div>
+                            <p class="text-[10px] font-bold text-purple-600 uppercase tracking-widest">AI
+                                กำลังประมวลผล...</p>
                         </div>
                     </div>
                     <div class="absolute bottom-10 left-0 right-0 text-center px-6">
-                        <span id="scan-msg" class="bg-black/80 backdrop-blur-lg text-white text-[10px] py-3 px-8 rounded-full font-bold uppercase tracking-wider border border-white/20">กรุณาวางใบหน้าในกรอบ</span>
+                        <span id="scan-msg"
+                            class="bg-black/80 backdrop-blur-lg text-white text-[10px] py-3 px-8 rounded-full font-bold uppercase tracking-wider border border-white/20">กรุณาวางใบหน้าในกรอบ</span>
                     </div>
                 </div>
 
-                <div id="gps-info-box" class="bg-white p-8 rounded-[2rem] border-l-8 border-red-500 shadow-xl flex justify-between items-center transition-all duration-500">
+                <div id="gps-info-box"
+                    class="bg-white p-8 rounded-[2rem] border-l-8 border-red-500 shadow-xl flex justify-between items-center transition-all duration-500">
                     <div>
-                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Office Proximity</p>
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Office Proximity
+                        </p>
                         <p id="txt-range" class="text-4xl font-bold text-slate-800 tracking-tighter">-- กม.</p>
                     </div>
-                    <div id="badge-range" class="bg-red-50 text-red-600 px-4 py-2 rounded-full text-[10px] font-bold border border-red-100 uppercase tracking-widest">Out of area</div>
+                    <div id="badge-range"
+                        class="bg-red-50 text-red-600 px-4 py-2 rounded-full text-[10px] font-bold border border-red-100 uppercase tracking-widest">
+                        Out of area</div>
                 </div>
 
                 <div class="flex space-x-4">
-                    <button id="btn-scan-start" onclick="startCamera('v-scan')" class="flex-grow bg-blue-800 text-white py-5 rounded-[1.5rem] font-bold shadow-xl shadow-blue-100 btn-press flex items-center justify-center gap-3">
+                    <button id="btn-scan-start" onclick="startCamera('v-scan')"
+                        class="flex-grow bg-blue-800 text-white py-5 rounded-[1.5rem] font-bold shadow-xl shadow-blue-100 btn-press flex items-center justify-center gap-3">
                         <i data-lucide="play" class="w-5 h-5"></i> เปิดกล้องสแกน
                     </button>
-                    <button onclick="nav('dash')" class="bg-slate-100 text-slate-500 px-8 py-5 rounded-[1.5rem] font-bold btn-press">กลับ</button>
+                    <button onclick="nav('dash')"
+                        class="bg-slate-100 text-slate-500 px-8 py-5 rounded-[1.5rem] font-bold btn-press">กลับ</button>
                 </div>
             </div>
         </section>
 
         <!-- VIEW: AI ASSISTANT -->
         <section id="view-ai" class="hidden flex flex-col h-[75vh] page-content">
-            <div class="bg-white rounded-t-[2.5rem] p-6 md:p-8 border border-b-0 flex items-center justify-between shadow-sm">
+            <div
+                class="bg-white rounded-t-[2.5rem] p-6 md:p-8 border border-b-0 flex items-center justify-between shadow-sm">
                 <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 shadow-sm">
+                    <div
+                        class="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 shadow-sm">
                         <i data-lucide="sparkles" class="w-6 h-6"></i>
                     </div>
                     <div>
                         <h3 class="font-bold text-slate-800 leading-none mb-1">FaceFlow AI Assistant</h3>
-                        <p class="text-[10px] text-green-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                        <p
+                            class="text-[10px] text-green-500 font-bold uppercase tracking-widest flex items-center gap-1">
                             <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Gemini 2.5 Online
                         </p>
                     </div>
                 </div>
-                <button onclick="clearChat()" class="text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                <button onclick="clearChat()" class="text-slate-300 hover:text-red-500 transition-colors"><i
+                        data-lucide="trash-2" class="w-5 h-5"></i></button>
             </div>
             <div id="chat-box" class="flex-grow bg-white border-x p-6 md:p-8 overflow-y-auto space-y-6">
                 <div class="flex justify-start">
-                    <div class="message-ai p-5 max-w-[85%] text-sm text-slate-700 shadow-sm border border-purple-50 leading-relaxed">
-                        สวัสดีครับ! ผมคือผู้ช่วยอัจฉริยะที่เชื่อมต่อกับ <strong>Gemini 2.5</strong> <br>วันนี้มีอะไรให้ผมช่วยแนะนำ หรืออยากทราบข้อมูลการเข้างานของคุณไหมครับ?
+                    <div
+                        class="message-ai p-5 max-w-[85%] text-sm text-slate-700 shadow-sm border border-purple-50 leading-relaxed">
+                        สวัสดีครับ! ผมคือผู้ช่วยอัจฉริยะที่เชื่อมต่อกับ <strong>Gemini 2.5</strong>
+                        <br>วันนี้มีอะไรให้ผมช่วยแนะนำ หรืออยากทราบข้อมูลการเข้างานของคุณไหมครับ?
                     </div>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-b-[2.5rem] border flex space-x-3 shadow-2xl">
-                <input type="text" id="ai-input" placeholder="พิมพ์ข้อความคุยกับ AI..." class="flex-grow p-5 bg-slate-50 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-inner" onkeypress="if(event.key==='Enter') askGeminiAssistant()">
-                <button onclick="askGeminiAssistant()" id="btn-ai-send" class="bg-purple-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl shadow-purple-200 btn-press hover:bg-purple-700">
+                <input type="text" id="ai-input" placeholder="พิมพ์ข้อความคุยกับ AI..."
+                    class="flex-grow p-5 bg-slate-50 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-inner"
+                    onkeypress="if(event.key==='Enter') askGeminiAssistant()">
+                <button onclick="askGeminiAssistant()" id="btn-ai-send"
+                    class="bg-purple-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl shadow-purple-200 btn-press hover:bg-purple-700">
                     <i data-lucide="send" class="w-6 h-6"></i>
                 </button>
             </div>
@@ -228,18 +383,23 @@
                 <div class="bg-white rounded-[2.5rem] p-10 border shadow-sm space-y-8 text-center">
                     <div class="flex items-center gap-3 justify-center">
                         <i data-lucide="user-plus" class="w-8 h-8 text-blue-800"></i>
-                        <h3 class="text-2xl font-bold text-slate-800">ลงทะเบียนพนักงานใหม่</h3>
+                        <h3 class="text-2xl font-bold text-slate-800">ลงทะเบียนเจ้าหน้าที่ใหม่</h3>
                     </div>
-                    <div class="w-48 h-48 bg-slate-50 mx-auto rounded-full overflow-hidden border-4 border-white shadow-lg relative group cursor-pointer" onclick="startCamera('v-reg')">
+                    <div class="w-48 h-48 bg-slate-50 mx-auto rounded-full overflow-hidden border-4 border-white shadow-lg relative group cursor-pointer"
+                        onclick="startCamera('v-reg')">
                         <video id="v-reg" class="w-full h-full object-cover" playsinline muted></video>
-                        <div id="reg-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-white/90">
+                        <div id="reg-overlay"
+                            class="absolute inset-0 flex flex-col items-center justify-center bg-white/90">
                             <i data-lucide="user" class="w-12 h-12 text-slate-200 mb-3"></i>
-                            <span class="text-[10px] font-bold text-blue-800 uppercase tracking-widest">แตะเปิดกล้อง</span>
+                            <span
+                                class="text-[10px] font-bold text-blue-800 uppercase tracking-widest">แตะเปิดกล้อง</span>
                         </div>
                     </div>
                     <div class="max-w-sm mx-auto space-y-6">
-                        <input type="text" id="reg-name" placeholder="ชื่อ-นามสกุล พนักงาน" class="w-full p-5 border-2 border-slate-100 rounded-2xl text-center text-lg focus:ring-2 focus:ring-blue-600 outline-none transition-all">
-                        <button onclick="handleRegister()" id="btn-reg-save" class="w-full bg-blue-800 text-white py-5 rounded-[1.5rem] font-bold btn-press shadow-xl flex items-center justify-center gap-3">
+                        <input type="text" id="reg-name" placeholder="ชื่อ-นามสกุล เจ้าหน้าที่"
+                            class="w-full p-5 border-2 border-slate-100 rounded-2xl text-center text-lg focus:ring-2 focus:ring-blue-600 outline-none transition-all">
+                        <button onclick="handleRegister()" id="btn-reg-save"
+                            class="w-full bg-blue-800 text-white py-5 rounded-[1.5rem] font-bold btn-press shadow-xl flex items-center justify-center gap-3">
                             <i data-lucide="save" class="w-5 h-5"></i> บันทึกข้อมูลใบหน้า (<span id="reg-num">0</span>)
                         </button>
                     </div>
@@ -251,25 +411,35 @@
                         <i data-lucide="map" class="w-8 h-8 text-blue-800"></i>
                         <h3 class="text-2xl font-bold text-slate-800">ตั้งค่าพิกัดสำนักงาน</h3>
                     </div>
-                    <button onclick="getLoc()" class="w-full bg-blue-50 text-blue-700 py-4 rounded-2xl text-sm font-bold border border-blue-100 btn-press flex items-center justify-center gap-2">
+                    <button onclick="getLoc()"
+                        class="w-full bg-blue-50 text-blue-700 py-4 rounded-2xl text-sm font-bold border border-blue-100 btn-press flex items-center justify-center gap-2">
                         <i data-lucide="locate-fixed" class="w-4 h-4"></i> ใช้ตำแหน่งที่คุณยืนอยู่ตอนนี้
                     </button>
                     <div class="grid grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label class="text-[11px] font-bold text-slate-400 uppercase ml-2 tracking-widest">Latitude</label>
-                            <input id="c-lat" type="number" step="any" class="w-full p-4 bg-slate-50 border-0 rounded-2xl text-sm font-mono focus:ring-2 focus:ring-blue-800 shadow-inner">
+                            <label
+                                class="text-[11px] font-bold text-slate-400 uppercase ml-2 tracking-widest">Latitude</label>
+                            <input id="c-lat" type="number" step="any"
+                                class="w-full p-4 bg-slate-50 border-0 rounded-2xl text-sm font-mono focus:ring-2 focus:ring-blue-800 shadow-inner">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-[11px] font-bold text-slate-400 uppercase ml-2 tracking-widest">Longitude</label>
-                            <input id="c-lng" type="number" step="any" class="w-full p-4 bg-slate-50 border-0 rounded-2xl text-sm font-mono focus:ring-2 focus:ring-blue-800 shadow-inner">
+                            <label
+                                class="text-[11px] font-bold text-slate-400 uppercase ml-2 tracking-widest">Longitude</label>
+                            <input id="c-lng" type="number" step="any"
+                                class="w-full p-4 bg-slate-50 border-0 rounded-2xl text-sm font-mono focus:ring-2 focus:ring-blue-800 shadow-inner">
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <label class="text-[11px] font-bold text-slate-400 uppercase ml-2 tracking-widest">รัศมีที่อนุญาต (กิโลเมตร)</label>
-                        <input id="c-rad" type="number" step="0.01" class="w-full p-4 bg-slate-50 border-0 rounded-2xl text-sm font-bold shadow-inner">
-                        <p class="text-[10px] text-slate-400 ml-2 italic text-red-500 font-bold">* ระยะปัจจุบัน: <span id="cur-diff">--</span> กม. จากจุดเช็คอิน</p>
+                        <label
+                            class="text-[11px] font-bold text-slate-400 uppercase ml-2 tracking-widest">รัศมีที่อนุญาต
+                            (กิโลเมตร)</label>
+                        <input id="c-rad" type="number" step="0.01"
+                            class="w-full p-4 bg-slate-50 border-0 rounded-2xl text-sm font-bold shadow-inner">
+                        <p class="text-[10px] text-slate-400 ml-2 italic text-red-500 font-bold">* ระยะปัจจุบัน: <span
+                                id="cur-diff">--</span> กม. จากจุดเช็คอิน</p>
                     </div>
-                    <button onclick="saveAdminConf()" class="w-full bg-slate-900 text-white py-5 rounded-[1.5rem] font-bold btn-press shadow-2xl">
+                    <button onclick="saveAdminConf()"
+                        class="w-full bg-slate-900 text-white py-5 rounded-[1.5rem] font-bold btn-press shadow-2xl">
                         บันทึกพิกัดลงฐานข้อมูล
                     </button>
                 </div>
@@ -279,113 +449,121 @@
     </main>
 
     <!-- Success Modal -->
-    <div id="modal-success" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-6 backdrop-blur-xl">
-        <div class="bg-white rounded-[3.5rem] p-12 text-center w-full max-w-md border-t-[12px] border-purple-600 shadow-2xl page-content">
-            <div class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-8 text-4xl shadow-inner">✨</div>
+    <div id="modal-success"
+        class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-6 backdrop-blur-xl">
+        <div
+            class="bg-white rounded-[3.5rem] p-12 text-center w-full max-w-md border-t-[12px] border-purple-600 shadow-2xl page-content">
+            <div
+                class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-8 text-4xl shadow-inner">
+                ✨</div>
             <h2 class="text-3xl font-bold mb-2 text-slate-900 leading-tight">ลงเวลาสำเร็จ!</h2>
             <p id="m-user" class="text-blue-600 font-bold text-xl mb-2">--</p>
-            
-            <div class="my-8 p-6 bg-purple-50 rounded-3xl border border-purple-100 italic text-slate-700 text-sm leading-relaxed relative">
+
+            <div
+                class="my-8 p-6 bg-purple-50 rounded-3xl border border-purple-100 italic text-slate-700 text-sm leading-relaxed relative">
                 <i data-lucide="quote" class="w-6 h-6 text-purple-200 absolute -top-3 -left-3 fill-current"></i>
                 <span id="ai-greeting">กำลังสร้างคำทักทาย...</span>
             </div>
-            
+
             <p id="m-time" class="text-slate-400 text-[11px] font-bold uppercase tracking-[0.3em] mb-10">--:--</p>
-            <button onclick="closeModal()" class="w-full bg-slate-900 text-white py-6 rounded-[2.5rem] font-bold btn-press shadow-xl text-lg hover:bg-black transition-all">ตกลง</button>
+            <button onclick="closeModal()"
+                class="w-full bg-slate-900 text-white py-6 rounded-[2.5rem] font-bold btn-press shadow-xl text-lg hover:bg-black transition-all">ตกลง</button>
         </div>
     </div>
 
     <script>
-        // --- 🛡️ GAS & PREVIEW MOCKING (เพื่อป้องกัน JS Crash เมื่อรันนอก GAS) ---
-        if (typeof google === 'undefined') {
-          window.google = { script: { run: { withSuccessHandler: function(cb) { this._cb = cb; return this; }, withFailureHandler: function() { return this; },
-          getConfig: function() { if(this._cb) this._cb({lat: 13.75, lng: 100.5, radius: 0.5}); },
-          getKnownFaces: function() { if(this._cb) this._cb([]); },
-          registerUser: function() { if(this._cb) this._cb("Success"); },
-          logAttendance: function() { if(this._cb) this._cb("Logged"); },
-          saveConfig: function() { if(this._cb) this._cb("Saved"); }
-          }}};
+        // ============================================================
+        // 🔧 ตั้งค่า GAS URL ของคุณที่นี่ (ได้จาก Deploy > Manage deployments)
+        // ============================================================
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwy3K2UjtSNSQ3SktUoFpMFzTSMDfr7A-fxq6o40ucLPquLaYyFShyfEP44hZUjJgfhzQ/exec';
+        // ============================================================
+
+        // --- 🌐 API Helper (เรียก GAS ผ่าน fetch) ---
+        async function gasApi(action, payload) {
+            if (!payload) payload = {};
+            try {
+                var response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(Object.assign({ action: action }, payload)),
+                    redirect: 'follow'
+                });
+                var data = await response.json();
+                return data.result;
+            } catch (e) {
+                console.error('API Error [' + action + ']:', e);
+                throw e;
+            }
         }
 
-        // --- Gemini AI Configuration ---
-        const apiKey = ""; // ใส่ API Key จริงของคุณที่นี่
-        const modelName = "gemini-2.5-flash-preview-09-2025";
-        
-        async function callGemini(prompt, systemHint = "") {
-            if (!apiKey) return "AI ผู้ช่วยพร้อมให้คำปรึกษา (โปรดใส่ API Key ในโค้ดครับ)";
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-            const payload = { contents: [{ parts: [{ text: prompt }] }], systemInstruction: systemHint ? { parts: [{ text: systemHint }] } : undefined };
-
-            try {
-                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                const result = await response.json();
-                return result.candidates?.[0]?.content?.parts?.[0]?.text || "AI ไม่พร้อมตอบในขณะนี้";
-            } catch (e) { return "ติดต่อ AI ไม่ได้ครับ"; }
+        // --- 🛡️ XSS Protection ---
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
         }
 
         // --- App State & Init ---
-        let config = { lat: 0, lng: 0, radius: 0.5 };
-        let userPos = { lat: null, lng: null };
-        let staffDb = [];
-        let aiReady = false;
-        let activeStream = null;
+        var config = { lat: 0, lng: 0, radius: 0.5 };
+        var userPos = { lat: null, lng: null };
+        var staffDb = [];
+        var aiReady = false;
+        var activeStream = null;
+        var isCheckedIn = false;
         const MODEL_URL = 'https://justadudewhohacks.github.io/face-api.js/models';
 
-        window.addEventListener('load', async () => {
-            try { lucide.createIcons(); } catch(e) { console.error("Lucide Error", e); }
+        window.addEventListener('load', async function () {
+            try { lucide.createIcons(); } catch (e) { console.error("Lucide Error", e); }
             initChart();
             initGPS();
             loadAI();
             syncData();
         });
 
-        // --- UI Navigation (แก้ไขเพื่อให้กดได้ 100%) ---
+        // --- UI Navigation ---
         function nav(id) {
-            // ซ่อนหน้าอื่นทั้งหมด
-            const sections = document.querySelectorAll('section');
-            sections.forEach(s => s.classList.add('hidden'));
-            
-            // แสดงหน้าที่เลือก
-            const target = document.getElementById('view-' + id);
-            if(target) target.classList.remove('hidden');
+            document.querySelectorAll('section').forEach(function (s) { s.classList.add('hidden'); });
+            var target = document.getElementById('view-' + id);
+            if (target) target.classList.remove('hidden');
+            document.querySelectorAll('.nav-link').forEach(function (t) { t.classList.remove('active'); });
+            var activeTab = document.getElementById('tab-' + id);
+            if (activeTab) activeTab.classList.add('active');
+            stopCamera();
+            if (window.scanTimeout) { clearTimeout(window.scanTimeout); window.scanTimeout = null; }
+            try { lucide.createIcons(); } catch (e) { }
+        }
 
-            // อัปเดตสถานะปุ่มเมนู
-            const links = document.querySelectorAll('.nav-link');
-            links.forEach(t => t.classList.remove('active'));
-            const activeTab = document.getElementById('tab-' + id);
-            if(activeTab) activeTab.classList.add('active');
-
-            // เคลียร์กล้องและ Loop
-            if (activeStream) { activeStream.getTracks().forEach(t => t.stop()); activeStream = null; }
-            if (window.loop) clearInterval(window.loop);
-
-            // Re-render Icons
-            try { lucide.createIcons(); } catch(e) {}
+        // --- Camera Management ---
+        function stopCamera() {
+            if (activeStream) {
+                activeStream.getTracks().forEach(function (t) { t.stop(); });
+                activeStream = null;
+            }
         }
 
         // --- Diagnostics & Monitoring ---
         async function testCameraDirectly() {
             updateBadge('cam', 'loading', 'กำลังเปิดกล้อง...');
             try {
-                const s = await navigator.mediaDevices.getUserMedia({ video: true });
+                var s = await navigator.mediaDevices.getUserMedia({ video: true });
                 updateBadge('cam', 'ok', 'พร้อมใช้งาน');
-                s.getTracks().forEach(t => t.stop());
+                s.getTracks().forEach(function (t) { t.stop(); });
             } catch (e) {
                 updateBadge('cam', 'error', 'ถูกบล็อก / หาไม่เจอ');
-                alert("❌ ระบบเข้าไม่ถึงกล้อง โปรดทำตามนี้:\n1. ตรวจสอบแอปอื่นที่อาจใช้กล้องอยู่\n2. กดรูปแม่กุญแจที่แถบ URL และอนุญาตสิทธิ์กล้องครับ");
+                alert("❌ ระบบเข้าไม่ถึงกล้อง\n1. กดรูปแม่กุญแจที่แถบ URL และอนุญาตสิทธิ์กล้อง\n2. รีเฟรชหน้าแล้วลองใหม่");
             }
         }
 
         function initGPS() {
             if (!navigator.geolocation) { updateBadge('gps', 'error', 'ไม่รองรับ'); return; }
             updateBadge('gps', 'loading', 'กำลังหาพิกัด...');
-            navigator.geolocation.getCurrentPosition(p => {
+            navigator.geolocation.getCurrentPosition(function (p) {
                 userPos.lat = p.coords.latitude; userPos.lng = p.coords.longitude;
                 updateBadge('gps', 'ok', 'เชื่อมต่อแล้ว');
-                const diff = getDist(userPos.lat, userPos.lng, config.lat, config.lng);
-                const diffEl = document.getElementById('cur-diff');
-                if(diffEl) diffEl.innerText = diff.toFixed(3);
-            }, () => updateBadge('gps', 'error', 'ปิดอยู่ / ปฏิเสธ'), {enableHighAccuracy: true});
+                var diff = getDist(userPos.lat, userPos.lng, config.lat, config.lng);
+                var diffEl = document.getElementById('cur-diff');
+                if (diffEl) diffEl.innerText = diff.toFixed(3);
+            }, function () { updateBadge('gps', 'error', 'ปิดอยู่ / ปฏิเสธ'); }, { enableHighAccuracy: true });
         }
 
         async function loadAI() {
@@ -401,97 +579,132 @@
             } catch (e) { updateBadge('ai', 'error', 'โหลดล้มเหลว'); }
         }
 
-        function syncData() {
-            google.script.run.withSuccessHandler(res => {
-                if (res) { config = res; document.getElementById('c-lat').value = res.lat; document.getElementById('c-lng').value = res.lng; document.getElementById('c-rad').value = res.radius; }
-            }).getConfig();
+        async function syncData() {
+            try {
+                var res = await gasApi('getConfig');
+                if (res) {
+                    config = res;
+                    document.getElementById('c-lat').value = res.lat;
+                    document.getElementById('c-lng').value = res.lng;
+                    document.getElementById('c-rad').value = res.radius;
+                }
+            } catch (e) { console.error('โหลด Config ล้มเหลว:', e); }
 
-            google.script.run.withSuccessHandler(db => {
-                const data = Array.isArray(db) ? db : [];
-                staffDb = data.map(u => ({ label: u.label, descriptor: new Float32Array(u.descriptor) }));
-            }).getKnownFaces();
+            try {
+                var db = await gasApi('getKnownFaces');
+                var data = Array.isArray(db) ? db : [];
+                staffDb = data.map(function (u) { return { label: u.label, descriptor: new Float32Array(u.descriptor) }; });
+            } catch (e) { console.error('โหลดข้อมูลเจ้าหน้าที่ล้มเหลว:', e); }
         }
 
         // --- Core Processes ---
         async function startCamera(id) {
             if (!aiReady) return alert("โปรดรอ AI โหลดให้เสร็จก่อนครับ");
-            const v = document.getElementById(id);
+            stopCamera();
+            var v = document.getElementById(id);
             try {
                 activeStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
                 v.srcObject = activeStream;
                 await v.play();
                 if (id === 'v-scan') startScanningLoop(v);
-                else { const over = document.getElementById('reg-overlay'); if(over) over.classList.add('hidden'); }
-            } catch (e) { alert("เปิดกล้องไม่ได้: " + e.message); }
+                else { var over = document.getElementById('reg-overlay'); if (over) over.classList.add('hidden'); }
+            } catch (e) {
+                alert("เปิดกล้องไม่ได้: " + e.message + "\n\nกรุณาอนุญาตสิทธิ์กล้องที่แถบ URL แล้วรีเฟรชหน้า");
+            }
         }
 
         function startScanningLoop(v) {
-            const msg = document.getElementById('scan-msg');
-            window.loop = setInterval(async () => {
-                navigator.geolocation.getCurrentPosition(p => { userPos.lat = p.coords.latitude; userPos.lng = p.coords.longitude; });
-                const d = getDist(userPos.lat, userPos.lng, config.lat, config.lng);
+            var msg = document.getElementById('scan-msg');
+            isCheckedIn = false;
+
+            async function scanOnce() {
+                if (isCheckedIn) return;
+                navigator.geolocation.getCurrentPosition(function (p) {
+                    userPos.lat = p.coords.latitude;
+                    userPos.lng = p.coords.longitude;
+                });
+                var d = getDist(userPos.lat, userPos.lng, config.lat, config.lng);
                 updateRangeUI(d);
 
                 if (d <= config.radius || config.radius === 0) {
                     msg.innerText = "กำลังตรวจจับใบหน้า...";
-                    const det = await faceapi.detectSingleFace(v).withFaceLandmarks().withFaceDescriptor();
-                    if (det && staffDb.length > 0) {
-                        const m = findMatch(det.descriptor);
-                        if (m.distance < 0.45) {
-                            clearInterval(window.loop);
-                            handleSuccess(m.label);
+                    try {
+                        var det = await faceapi.detectSingleFace(v).withFaceLandmarks().withFaceDescriptor();
+                        if (det && staffDb.length > 0) {
+                            var m = findMatch(det.descriptor);
+                            if (m.distance < 0.45) {
+                                isCheckedIn = true;
+                                handleSuccess(m.label);
+                                return;
+                            }
                         }
-                    }
+                    } catch (e) { console.error('Face detection error:', e); }
                 } else {
                     msg.innerText = "🛑 กรุณาเข้าใกล้จุดลงเวลากว่านี้";
                 }
-            }, 1000);
+                window.scanTimeout = setTimeout(scanOnce, 1000);
+            }
+            scanOnce();
         }
 
         async function handleSuccess(name) {
-            const loader = document.getElementById('scan-loading');
-            if(loader) loader.classList.remove('hidden');
-            
-            google.script.run.withSuccessHandler(async () => {
+            var loader = document.getElementById('scan-loading');
+            if (loader) loader.classList.remove('hidden');
+            try {
+                await gasApi('logAttendance', { name: name, lat: userPos.lat, lng: userPos.lng });
                 document.getElementById('m-user').innerText = name;
                 document.getElementById('m-time').innerText = new Date().toLocaleTimeString('th-TH');
                 document.getElementById('modal-success').classList.remove('hidden');
-                if(loader) loader.classList.add('hidden');
-                
-                const greeting = await callGemini(
-                    `พนักงานชื่อ ${name} เพิ่งเช็คอินเข้างานสำเร็จ ช่วยสร้างประโยคทักทายที่สั้นๆ อบอุ่น และมีคำคมให้กำลังใจพนักงาน 1 ประโยคครับ`,
-                    "คุณคือผู้ช่วย HR ที่เป็นกันเองและชอบให้กำลังใจ"
-                );
-                document.getElementById('ai-greeting').innerText = greeting;
+                if (loader) loader.classList.add('hidden');
+                try {
+                    var greeting = await gasApi('callGeminiGreeting', { name: name });
+                    document.getElementById('ai-greeting').innerText = greeting;
+                } catch (e) {
+                    document.getElementById('ai-greeting').innerText = "ยินดีต้อนรับเข้าสู่วันทำงานใหม่ครับ!";
+                }
                 lucide.createIcons();
-            }).logAttendance(name, userPos.lat, userPos.lng);
+            } catch (err) {
+                if (loader) loader.classList.add('hidden');
+                alert("❌ บันทึกเวลาล้มเหลว: " + err);
+                isCheckedIn = false;
+            }
         }
 
+        // AI Chat
         async function askGeminiAssistant() {
-            const input = document.getElementById('ai-input');
-            const chat = document.getElementById('chat-box');
+            var input = document.getElementById('ai-input');
+            var chat = document.getElementById('chat-box');
             if (!input.value.trim()) return;
-
-            const userText = input.value;
-            chat.innerHTML += `<div class="flex justify-end animate-in fade-in"><div class="message-user p-5 max-w-[85%] text-sm shadow-md leading-relaxed font-bold">${userText}</div></div>`;
+            var userText = input.value;
+            var safeText = escapeHtml(userText);
+            chat.innerHTML += '<div class="flex justify-end animate-in fade-in"><div class="message-user p-5 max-w-[85%] text-sm shadow-md leading-relaxed font-bold">' + safeText + '</div></div>';
             input.value = "";
             chat.scrollTop = chat.scrollHeight;
 
-            const thinking = document.createElement('div');
+            var thinking = document.createElement('div');
             thinking.className = "flex justify-start animate-pulse";
-            thinking.innerHTML = `<div class="message-ai p-4 text-[10px] font-bold text-purple-600 uppercase tracking-widest">AI กำลังคิด...</div>`;
+            thinking.innerHTML = '<div class="message-ai p-4 text-[10px] font-bold text-purple-600 uppercase tracking-widest">AI กำลังคิด...</div>';
             chat.appendChild(thinking);
 
-            const aiReply = await callGemini(userText, "คุณคือผู้ช่วยระบบบันทึกเวลา FaceFlow รอบรู้เรื่องสถิติการทำงานและวิธีใช้แอป");
-            chat.removeChild(thinking);
-            chat.innerHTML += `<div class="flex justify-start animate-in fade-in"><div class="message-ai p-5 max-w-[85%] text-sm text-slate-700 shadow-sm border border-purple-50 leading-relaxed">${aiReply}</div></div>`;
+            try {
+                var aiReply = await gasApi('callGemini', {
+                    prompt: userText,
+                    systemHint: "คุณคือผู้ช่วยระบบบันทึกเวลา FaceFlow รอบรู้เรื่องสถิติการทำงานและวิธีใช้แอป"
+                });
+                if (chat.contains(thinking)) chat.removeChild(thinking);
+                var safeReply = escapeHtml(aiReply);
+                chat.innerHTML += '<div class="flex justify-start animate-in fade-in"><div class="message-ai p-5 max-w-[85%] text-sm text-slate-700 shadow-sm border border-purple-50 leading-relaxed">' + safeReply + '</div></div>';
+            } catch (err) {
+                if (chat.contains(thinking)) chat.removeChild(thinking);
+                chat.innerHTML += '<div class="flex justify-start"><div class="message-ai p-5 max-w-[85%] text-sm text-red-500 border border-red-100 rounded-2xl">❌ เกิดข้อผิดพลาด: ' + escapeHtml(String(err)) + '</div></div>';
+            }
             chat.scrollTop = chat.scrollHeight;
         }
 
         // --- Helpers ---
         function updateBadge(id, type, txt) {
-            const b = document.getElementById(`badge-${id}`);
-            const m = document.getElementById(`msg-${id}`);
+            var b = document.getElementById('badge-' + id);
+            var m = document.getElementById('msg-' + id);
             if (!b) return;
             b.innerText = txt;
             if (type === 'ok') b.className = "text-[10px] font-bold px-3 py-1 rounded-full bg-green-50 text-green-600 border border-green-100";
@@ -501,10 +714,10 @@
         }
 
         function updateRangeUI(d) {
-            const card = document.getElementById('gps-info-box');
-            const badge = document.getElementById('badge-range');
+            var card = document.getElementById('gps-info-box');
+            var badge = document.getElementById('badge-range');
             document.getElementById('txt-range').innerText = d.toFixed(3) + " กม.";
-            const near = d <= config.radius || config.radius === 0;
+            var near = d <= config.radius || config.radius === 0;
             card.style.borderColor = near ? "#22C55E" : "#E31E24";
             badge.innerText = near ? "IN RANGE ✅" : "OUT OF RANGE ❌";
             badge.className = near ? "bg-green-50 text-green-600 px-4 py-2 rounded-full text-[10px] font-bold border border-green-100 uppercase tracking-widest" : "bg-red-50 text-red-600 px-4 py-2 rounded-full text-[10px] font-bold border border-red-100 uppercase tracking-widest";
@@ -512,19 +725,19 @@
 
         function getDist(la1, lo1, la2, lo2) {
             if (la1 === null || la2 === null) return 999;
-            const R = 6371; const dLa = (la2-la1)*Math.PI/180; const dLo = (lo2-lo1)*Math.PI/180;
-            const a = Math.sin(dLa/2)**2 + Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dLo/2)**2;
-            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            var R = 6371; var dLa = (la2 - la1) * Math.PI / 180; var dLo = (lo2 - lo1) * Math.PI / 180;
+            var a = Math.sin(dLa / 2) ** 2 + Math.cos(la1 * Math.PI / 180) * Math.cos(la2 * Math.PI / 180) * Math.sin(dLo / 2) ** 2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         }
 
         function findMatch(q) {
-            let b = { label: 'unknown', distance: 1.0 };
-            staffDb.forEach(u => { const d = faceapi.euclideanDistance(q, u.descriptor); if (d < b.distance) b = { label: u.label, distance: d }; });
+            var b = { label: 'unknown', distance: 1.0 };
+            staffDb.forEach(function (u) { var d = faceapi.euclideanDistance(q, u.descriptor); if (d < b.distance) b = { label: u.label, distance: d }; });
             return b;
         }
 
         function initChart() {
-            const ctx = document.getElementById('statChart').getContext('2d');
+            var ctx = document.getElementById('statChart').getContext('2d');
             new Chart(ctx, {
                 type: 'bar',
                 data: { labels: ['จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.'], datasets: [{ label: 'Checks', data: [14, 18, 12, 16, 15], backgroundColor: '#003399', borderRadius: 10, barThickness: 20 }] },
@@ -532,27 +745,52 @@
             });
         }
 
-        function handleRegister() {
-            const n = document.getElementById('reg-name').value.trim();
-            const v = document.getElementById('v-reg');
+        // Registration
+        async function handleRegister() {
+            var n = document.getElementById('reg-name').value.trim();
+            var v = document.getElementById('v-reg');
+            var btn = document.getElementById('btn-reg-save');
             if (!n || !v.srcObject) return alert("โปรดใส่ชื่อและเปิดกล้องก่อนครับ");
-            document.getElementById('btn-reg-save').innerText = "AI ประมวลผลใบหน้า...";
-            faceapi.detectSingleFace(v).withFaceLandmarks().withFaceDescriptor().then(det => {
+            var originalText = btn.innerText;
+            btn.innerText = "AI ประมวลผลใบหน้า...";
+            try {
+                var det = await faceapi.detectSingleFace(v).withFaceLandmarks().withFaceDescriptor();
                 if (det) {
-                    google.script.run.withSuccessHandler(() => {
-                        alert("บันทึกสำเร็จ!");
-                        document.getElementById('reg-num').innerText = parseInt(document.getElementById('reg-num').innerText) + 1;
-                        document.getElementById('btn-reg-save').innerText = "บันทึกข้อมูลใบหน้า";
-                        syncData();
-                    }).registerUser(n, Array.from(det.descriptor));
-                } else { alert("ไม่พบใบหน้า"); document.getElementById('btn-reg-save').innerText = "บันทึกข้อมูลใบหน้า"; }
-            });
+                    await gasApi('registerUser', { name: n, faceDescriptor: Array.from(det.descriptor) });
+                    alert("บันทึกสำเร็จ!");
+                    document.getElementById('reg-num').innerText = parseInt(document.getElementById('reg-num').innerText) + 1;
+                    btn.innerText = originalText;
+                    syncData();
+                } else {
+                    alert("ไม่พบใบหน้า กรุณาวางใบหน้าให้อยู่ในกรอบ");
+                    btn.innerText = originalText;
+                }
+            } catch (err) {
+                alert("❌ เกิดข้อผิดพลาด: " + err);
+                btn.innerText = originalText;
+            }
         }
 
         function closeModal() { document.getElementById('modal-success').classList.add('hidden'); nav('dash'); }
-        function clearChat() { document.getElementById('chat-box').innerHTML = `<div class="message-ai p-4 text-xs">ล้างแชทเรียบร้อย</div>`; }
-        function saveAdminConf() { google.script.run.saveConfig(document.getElementById('c-lat').value, document.getElementById('c-lng').value, document.getElementById('c-rad').value); alert("บันทึกสำเร็จ"); initGPS(); }
-        function getLoc() { navigator.geolocation.getCurrentPosition(p => { document.getElementById('c-lat').value = p.coords.latitude; document.getElementById('c-lng').value = p.coords.longitude; alert("ดึงพิกัดแล้ว อย่าลืมกดบันทึกนะครับ!"); }); }
+        function clearChat() { document.getElementById('chat-box').innerHTML = '<div class="message-ai p-4 text-xs">ล้างแชทเรียบร้อย</div>'; }
+
+        async function saveAdminConf() {
+            var lat = parseFloat(document.getElementById('c-lat').value);
+            var lng = parseFloat(document.getElementById('c-lng').value);
+            var radius = parseFloat(document.getElementById('c-rad').value);
+            try {
+                await gasApi('saveConfig', { lat: lat, lng: lng, radius: radius });
+                config.lat = lat; config.lng = lng; config.radius = radius;
+                alert("บันทึกสำเร็จ");
+                initGPS();
+            } catch (err) {
+                alert("❌ บันทึกล้มเหลว: " + err);
+            }
+        }
+
+        function getLoc() { navigator.geolocation.getCurrentPosition(function (p) { document.getElementById('c-lat').value = p.coords.latitude; document.getElementById('c-lng').value = p.coords.longitude; alert("ดึงพิกัดแล้ว อย่าลืมกดบันทึกนะครับ!"); }); }
     </script>
+
 </body>
+
 </html>
