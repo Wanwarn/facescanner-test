@@ -751,24 +751,32 @@
             var v = document.getElementById('v-reg');
             var btn = document.getElementById('btn-reg-save');
             if (!n || !v.srcObject) return alert("โปรดใส่ชื่อและเปิดกล้องก่อนครับ");
-            var originalText = btn.innerText;
-            btn.innerText = "AI ประมวลผลใบหน้า...";
+            var regNumEl = document.getElementById('reg-num');
+            var currentCount = parseInt(regNumEl.innerText) || 0;
+            var originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> AI ประมวลผลใบหน้า...';
+            btn.disabled = true;
             try {
                 var det = await faceapi.detectSingleFace(v).withFaceLandmarks().withFaceDescriptor();
                 if (det) {
                     await gasApi('registerUser', { name: n, faceDescriptor: Array.from(det.descriptor) });
+                    currentCount++;
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                    document.getElementById('reg-num').innerText = currentCount;
                     alert("บันทึกสำเร็จ!");
-                    document.getElementById('reg-num').innerText = parseInt(document.getElementById('reg-num').innerText) + 1;
-                    btn.innerText = originalText;
                     syncData();
                 } else {
                     alert("ไม่พบใบหน้า กรุณาวางใบหน้าให้อยู่ในกรอบ");
-                    btn.innerText = originalText;
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
                 }
             } catch (err) {
                 alert("❌ เกิดข้อผิดพลาด: " + err);
-                btn.innerText = originalText;
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
             }
+            try { lucide.createIcons(); } catch (e) { }
         }
 
         function closeModal() { document.getElementById('modal-success').classList.add('hidden'); nav('dash'); }
